@@ -1,16 +1,18 @@
 package com.xaghoul.reactiveintrotask.properties;
 
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.Duration;
 
 @Data
-public class ConfigurationProperties {
+@ConfigurationProperties("reactiveintrotask")
+public class CalculationProperties {
 
     private Duration delayMillis;
     private Duration timeoutMillis;
 
-    public ConfigurationProperties(int delayMillis, int timeoutMillis) {
+    public CalculationProperties(int delayMillis, int timeoutMillis) {
         this.delayMillis = Duration.ofMillis(delayMillis);
         this.timeoutMillis = Duration.ofMillis(timeoutMillis);
     }

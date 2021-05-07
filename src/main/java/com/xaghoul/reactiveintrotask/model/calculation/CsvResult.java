@@ -1,4 +1,4 @@
-package com.xaghoul.reactiveintrotask.model;
+package com.xaghoul.reactiveintrotask.model.calculation;
 
 import java.util.List;
 

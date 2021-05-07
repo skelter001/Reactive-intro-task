@@ -1,7 +1,7 @@
 package com.xaghoul.reactiveintrotask.service;
 
-import com.xaghoul.reactiveintrotask.model.OrderedCalculation;
-import com.xaghoul.reactiveintrotask.model.UnorderedCalculation;
+import com.xaghoul.reactiveintrotask.model.calculation.OrderedCalculation;
+import com.xaghoul.reactiveintrotask.model.calculation.UnorderedCalculation;
 import reactor.core.publisher.Flux;
 
 public interface CalculationService {
