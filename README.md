@@ -1,3 +1,5 @@
 # Reactive RESTful Web Service Calculator
 
-Stack: Java 11, Gradle, Spring WebFlux
+[Task tech. requirement](TASK.md)
+
+Stack: Java 11, Gradle, Spring WebFlux, Graaljs
