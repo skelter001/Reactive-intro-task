@@ -31,7 +31,7 @@ public class CalculationHandler {
                                 calculationService.calculateOrdered(
                                         calculation.getFirstFunction(),
                                         calculation.getSecondFunction(),
-                                        calculation.getIters())
+                                        calculation.getIter())
                                         .map(OrderedCalculation::getDataAsString)
                         )));
     }
@@ -46,7 +46,7 @@ public class CalculationHandler {
                                 calculationService.calculateUnordered(
                                         calculation.getFirstFunction(),
                                         calculation.getSecondFunction(),
-                                        calculation.getIters())
+                                        calculation.getIter())
                                         .map(UnorderedCalculation::getDataAsString)
                         )));
     }

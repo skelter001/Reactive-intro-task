@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class CalculationRequest {
     private String firstFunction;
     private String secondFunction;
-    private int iters;
+    private int iter;
 }

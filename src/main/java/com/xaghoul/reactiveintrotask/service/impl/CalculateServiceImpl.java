@@ -28,21 +28,21 @@ public class CalculateServiceImpl implements CalculationService {
         this.properties = properties;
     }
 
-    private Flux<Calculation> calculate(String function, int iters) {
+    private Flux<Calculation> calculate(String function, int iter) {
         return Mono.fromSupplier(() -> factory.createCalculator(function))
-                .flatMapMany(calc -> fromStream(IntStream.range(1, iters).boxed())
+                .flatMapMany(calc -> fromStream(IntStream.range(1, iter).boxed())
                         .delayElements(properties.getDelayMillis())
                         .map(calc::calculate));
     }
 
     @Override
-    public Flux<OrderedCalculation> calculateOrdered(String firstFunction, String secondFunction, int iters) {
+    public Flux<OrderedCalculation> calculateOrdered(String firstFunction, String secondFunction, int iter) {
         AtomicInteger counter = new AtomicInteger(0);
 
-        Flux<Calculation> calculationFlux1 = calculate(firstFunction, iters)
+        Flux<Calculation> calculationFlux1 = calculate(firstFunction, iter)
                 .doOnNext(res -> counter.incrementAndGet());
 
-        Flux<Calculation> calculationFlux2 = calculate(secondFunction, iters)
+        Flux<Calculation> calculationFlux2 = calculate(secondFunction, iter)
                 .doOnNext(res -> counter.decrementAndGet());
 
         return calculationFlux1.zipWith(calculationFlux2,
@@ -57,10 +57,10 @@ public class CalculateServiceImpl implements CalculationService {
     }
 
     @Override
-    public Flux<UnorderedCalculation> calculateUnordered(String firstFunction, String secondFunction, int iters) {
+    public Flux<UnorderedCalculation> calculateUnordered(String firstFunction, String secondFunction, int iter) {
         return Flux
                 .merge(
-                        calculate(firstFunction, iters)
+                        calculate(firstFunction, iter)
                                 .map(
                                         calculation -> new UnorderedCalculation(
                                                 1,
@@ -70,7 +70,7 @@ public class CalculateServiceImpl implements CalculationService {
                                         )
                                 )
                         ,
-                        calculate(secondFunction, iters)
+                        calculate(secondFunction, iter)
                                 .map(
                                         calculation -> new UnorderedCalculation(
                                                 2,

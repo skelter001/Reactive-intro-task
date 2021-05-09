@@ -15,13 +15,15 @@ public class GraalJsCalculator implements Calculator {
 
     // TODO: 5/7/2021 pass id here or in service
     @Override
-    public Calculation calculate(int idx) {
+    public Calculation calculate(int callNumber) {
         try(Context context = Context.create()) {
-            Value functionResult = context.eval("js", functionCode);
+            //System.setProperty("polyglot.js.nashorn-compat", "true");
+            Value functionResult = context.eval("js",
+                    "function test(callNumber) {" + functionCode + "}");
             Instant start = Instant.now();
-            Object result = functionResult.execute();
+            Object result = functionResult.execute(callNumber);
             Instant end = Instant.now();
-            return new Calculation(idx, result, Duration.between(end, start));
+            return new Calculation(callNumber, result, Duration.between(end, start));
         }
     }
 }
