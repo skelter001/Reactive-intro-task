@@ -14,7 +14,7 @@ public class UnorderedCalculation extends Calculation implements CsvResult {
     int calculationNumber;
 
     public UnorderedCalculation(int functionNumber, int calculationNumber, Object result, Duration executionTime) {
-        super(result, executionTime);
+        super(calculationNumber, result, executionTime);
         this.functionNumber = functionNumber;
         this.calculationNumber = calculationNumber;
     }
