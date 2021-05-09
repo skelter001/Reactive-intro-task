@@ -9,14 +9,14 @@ public class CalculationWebClient {
 
     private final WebClient client = WebClient.create("http://localhost:8080");
 
-    private Mono<ClientResponse> orderedResult = client.get()
+    private final Mono<ClientResponse> orderedResult = client.get()
             .uri("/calculate/ordered")
-            .accept(MediaType.TEXT_PLAIN)
+            .accept(MediaType.TEXT_EVENT_STREAM)
             .exchangeToMono(rs -> Mono.just(rs.mutate().build()));
 
-    private Mono<ClientResponse> unorderedResult = client.get()
+    private final Mono<ClientResponse> unorderedResult = client.get()
             .uri("/calculate/unordered")
-            .accept(MediaType.TEXT_PLAIN)
+            .accept(MediaType.TEXT_EVENT_STREAM)
             .exchangeToMono(rs -> Mono.just(rs.mutate().build()));
 
     public void getOrderedResult() {
