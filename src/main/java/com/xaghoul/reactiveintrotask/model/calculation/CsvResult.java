@@ -5,7 +5,7 @@ import java.util.List;
 public interface CsvResult {
     List<Object> getData();
 
-    default String getResultAsString() {
+    default String getDataAsString() {
         return getData().stream()
                 .map(Object::toString)
                 .toString();

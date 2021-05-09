@@ -2,11 +2,13 @@ package com.xaghoul.reactiveintrotask.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class CalculationRequest {
-    private final String firstFunction;
-    private final String secondFunction;
-    private final int iters;
+    private String firstFunction;
+    private String secondFunction;
+    private int iters;
 }

@@ -36,7 +36,7 @@ public class CalculateServiceImpl implements CalculationService {
     }
 
     @Override
-    public Flux<OrderedCalculation> calculationOrderedResult(String firstFunction, String secondFunction, int iters) {
+    public Flux<OrderedCalculation> calculateOrdered(String firstFunction, String secondFunction, int iters) {
         AtomicInteger counter = new AtomicInteger(0);
 
         Flux<Calculation> calculationFlux1 = calculate(firstFunction, iters)
@@ -57,7 +57,7 @@ public class CalculateServiceImpl implements CalculationService {
     }
 
     @Override
-    public Flux<UnorderedCalculation> calculationUnorderedResult(String firstFunction, String secondFunction, int iters) {
+    public Flux<UnorderedCalculation> calculateUnordered(String firstFunction, String secondFunction, int iters) {
         return Flux
                 .merge(
                         calculate(firstFunction, iters)
