@@ -15,6 +15,7 @@ import java.time.Duration;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class Calculation {
+    int calculationNumber;
     Object result;
     Duration executionTime;
 }

@@ -21,7 +21,7 @@ public class GraalJsCalculator implements Calculator {
             Instant start = Instant.now();
             Object result = functionResult.execute();
             Instant end = Instant.now();
-            return new Calculation(result, Duration.between(end, start));
+            return new Calculation(idx, result, Duration.between(end, start));
         }
     }
 }

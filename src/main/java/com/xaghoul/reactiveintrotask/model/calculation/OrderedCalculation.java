@@ -13,6 +13,17 @@ public class OrderedCalculation implements CsvResult {
     Calculation secondCalculation;
     int secondFunctionAheadResults;
 
+    public OrderedCalculation(Calculation firstCalculation, int firstFunctionAheadResults,
+                              Calculation secondCalculation, int secondFunctionAheadResults) {
+        if(firstCalculation.getCalculationNumber() != secondCalculation.getCalculationNumber())
+            throw new RuntimeException();
+        calculationNumber = firstCalculation.getCalculationNumber();
+        this.firstCalculation = firstCalculation;
+        this.firstFunctionAheadResults = firstFunctionAheadResults;
+        this.secondCalculation = secondCalculation;
+        this.secondFunctionAheadResults = secondFunctionAheadResults;
+    }
+
     @Override
     public List<Object> getData() {
         return List.of(
