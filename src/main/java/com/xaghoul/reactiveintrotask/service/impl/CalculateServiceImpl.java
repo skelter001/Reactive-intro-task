@@ -77,7 +77,7 @@ public class CalculateServiceImpl implements CalculationService {
                                                 calculation.getResult(),
                                                 calculation.getExecutionTime()
                                         )
-                                )
+                                ).onBackpressureDrop()
                 );
     }
 }
