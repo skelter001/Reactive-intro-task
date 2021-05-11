@@ -46,4 +46,21 @@ public class GraalJsCalculator implements Calculator {
         double value = valueAsDigit(result);
         return new Calculation(callNumber, value, Duration.between(start.get(), end.get()));
     }
+
+    private double valueAsDigit(Value result) {
+        if (result.fitsInInt())
+            return result.asInt();
+        if (result.fitsInFloat())
+            return result.asFloat();
+        if (result.fitsInDouble())
+            return result.asDouble();
+        else
+            throw new IllegalArgumentException("Result cannot be cast to double");
+    }
+
+    private String createSourceCode(String functionCode) {
+        return "(function test(callNumber) {" +
+                functionCode +
+                "})";
+    }
 }
