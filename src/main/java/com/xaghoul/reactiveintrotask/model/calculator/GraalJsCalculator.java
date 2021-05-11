@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-@AllArgsConstructor
+
 public class GraalJsCalculator implements Calculator {
 
     private final String functionCode;

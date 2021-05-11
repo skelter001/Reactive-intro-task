@@ -20,4 +20,14 @@ public class UnorderedCalculation extends Calculation implements CsvResult {
     public List<Object> getData() {
         return List.of(super.getCalculationNumber(), functionNumber, super.getResult(), super.getExecutionTime());
     }
+
+    @Override
+    public String toString() {
+        return "UnorderedCalculation{" +
+                "functionNumber=" + functionNumber +
+                ", calculationNumber=" + super.getCalculationNumber() +
+                ", result=" + super.getResult() +
+                ", executionTime=" + super.getExecutionTime() +
+                '}';
+    }
 }
