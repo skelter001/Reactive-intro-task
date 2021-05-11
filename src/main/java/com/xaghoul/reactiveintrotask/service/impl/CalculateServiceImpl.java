@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
@@ -29,9 +30,9 @@ public class CalculateServiceImpl implements CalculationService {
     }
 
     private Flux<Calculation> calculate(String function, int iter) {
-        return Mono.fromSupplier(() -> factory.createCalculator(function))
-                .flatMapMany(calc -> fromStream(IntStream.range(1, iter).boxed())
-                        .delayElements(properties.getDelayMillis())
+        return Mono.fromSupplier(() -> factory.createCalculator(function, properties.getTimeoutMillis()))
+                .flatMapMany(calc -> fromStream(IntStream.range(0, iter).boxed())
+                        .delayElements(properties.getDelayAsDuration())
                         .map(calc::calculate));
     }
 
@@ -60,6 +61,7 @@ public class CalculateServiceImpl implements CalculationService {
         return Flux
                 .merge(
                         calculate(firstFunction, iter)
+                                .publishOn(Schedulers.parallel())
                                 .map(
                                         calculation -> new UnorderedCalculation(
                                                 1,
@@ -67,9 +69,10 @@ public class CalculateServiceImpl implements CalculationService {
                                                 calculation.getResult(),
                                                 calculation.getExecutionTime()
                                         )
-                                )
+                                ).onBackpressureDrop()
                         ,
                         calculate(secondFunction, iter)
+                                .publishOn(Schedulers.parallel())
                                 .map(
                                         calculation -> new UnorderedCalculation(
                                                 2,
