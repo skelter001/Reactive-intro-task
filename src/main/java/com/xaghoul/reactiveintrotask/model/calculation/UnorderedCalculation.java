@@ -1,25 +1,23 @@
 package com.xaghoul.reactiveintrotask.model.calculation;
 
 import lombok.EqualsAndHashCode;
-import lombok.Value;
+import lombok.Getter;
 
 import java.time.Duration;
 import java.util.List;
 
-@Value
+@Getter
 @EqualsAndHashCode(callSuper = true)
 public class UnorderedCalculation extends Calculation implements CsvResult {
 
-    int functionNumber;
-    int calculationNumber;
+    private final int functionNumber;
 
     public UnorderedCalculation(int functionNumber, int calculationNumber, Object result, Duration executionTime) {
         super(calculationNumber, result, executionTime);
         this.functionNumber = functionNumber;
-        this.calculationNumber = calculationNumber;
     }
 
     public List<Object> getData() {
-        return List.of(calculationNumber, functionNumber, super.getResult(), super.getExecutionTime());
+        return List.of(super.getCalculationNumber(), functionNumber, super.getResult(), super.getExecutionTime());
     }
 }
