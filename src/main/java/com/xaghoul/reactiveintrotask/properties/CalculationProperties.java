@@ -12,11 +12,19 @@ import java.time.Duration;
 @NoArgsConstructor
 public class CalculationProperties {
 
-    private Duration delayMillis;
-    private Duration timeoutMillis;
+    private int delayMillis;
+    private int timeoutMillis;
 
     public CalculationProperties(int delayMillis, int timeoutMillis) {
-        this.delayMillis = Duration.ofMillis(delayMillis);
-        this.timeoutMillis = Duration.ofMillis(timeoutMillis);
+        this.delayMillis = delayMillis;
+        this.timeoutMillis = timeoutMillis;
+    }
+
+    public Duration getDelayAsDuration() {
+        return Duration.ofMillis(delayMillis);
+    }
+
+    public Duration getTimeoutAsDuration() {
+        return Duration.ofMillis(timeoutMillis);
     }
 }

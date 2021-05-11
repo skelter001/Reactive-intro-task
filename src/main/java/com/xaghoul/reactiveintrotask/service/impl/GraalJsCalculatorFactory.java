@@ -7,7 +7,7 @@ import com.xaghoul.reactiveintrotask.service.CalculatorFactory;
 public class GraalJsCalculatorFactory implements CalculatorFactory {
 
     @Override
-    public Calculator createCalculator(String functionCode) {
-        return new GraalJsCalculator(functionCode);
+    public Calculator createCalculator(String functionCode, int timeout) {
+        return new GraalJsCalculator(functionCode, timeout);
     }
 }

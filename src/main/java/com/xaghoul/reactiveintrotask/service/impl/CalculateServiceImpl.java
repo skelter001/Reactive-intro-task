@@ -47,7 +47,6 @@ public class CalculateServiceImpl implements CalculationService {
 
         return calculationFlux1.zipWith(calculationFlux2,
                 (res1, res2) -> new OrderedCalculation(
-                        //res1.getCalculationNumber(),
                         res1,
                         Math.max(counter.get(), 0),
                         res2,
