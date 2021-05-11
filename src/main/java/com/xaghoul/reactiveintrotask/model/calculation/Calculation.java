@@ -13,4 +13,13 @@ public class Calculation {
     private final int calculationNumber;
     private final Object result;
     private final Duration executionTime;
+
+    @Override
+    public String toString() {
+        return "Calculation{" +
+                "calculationNumber=" + calculationNumber +
+                ", result=" + result +
+                ", executionTime=" + executionTime.toMillis() + " millis" +
+                '}';
+    }
 }

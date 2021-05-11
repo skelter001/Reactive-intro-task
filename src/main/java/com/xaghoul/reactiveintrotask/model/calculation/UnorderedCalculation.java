@@ -25,9 +25,7 @@ public class UnorderedCalculation extends Calculation implements CsvResult {
     public String toString() {
         return "UnorderedCalculation{" +
                 "functionNumber=" + functionNumber +
-                ", calculationNumber=" + super.getCalculationNumber() +
-                ", result=" + super.getResult() +
-                ", executionTime=" + super.getExecutionTime() +
+                ", " + super.toString() +
                 '}';
     }
 }

@@ -15,8 +15,6 @@ import reactor.core.scheduler.Schedulers;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
-import static reactor.core.publisher.Flux.fromStream;
-
 @Service
 public class CalculateServiceImpl implements CalculationService {
 
@@ -31,7 +29,7 @@ public class CalculateServiceImpl implements CalculationService {
 
     private Flux<Calculation> calculate(String function, int iter) {
         return Mono.fromSupplier(() -> factory.createCalculator(function, properties.getTimeoutMillis()))
-                .flatMapMany(calc -> fromStream(IntStream.range(0, iter).boxed())
+                .flatMapMany(calc -> Flux.fromStream(IntStream.range(0, iter).boxed())
                         .delayElements(properties.getDelayAsDuration())
                         .map(calc::calculate));
     }

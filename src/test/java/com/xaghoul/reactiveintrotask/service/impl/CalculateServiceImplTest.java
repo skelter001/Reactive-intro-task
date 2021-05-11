@@ -72,7 +72,7 @@ public class CalculateServiceImplTest {
                         calcResult.getSecondCalculation().getResult()
                 );
 
-        StepVerifier.create(result)
+        StepVerifier.create(result.onErrorContinue((throwable, o) -> throwable.printStackTrace()).log())
                 .expectNextMatches(resultPredicate)
                 .expectNextMatches(resultPredicate)
                 .expectNextMatches(resultPredicate)
