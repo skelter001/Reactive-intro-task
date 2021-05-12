@@ -1,5 +1,6 @@
 package com.xaghoul.reactiveintrotask.service.impl;
 
+import com.xaghoul.reactiveintrotask.exception.CalculationException;
 import com.xaghoul.reactiveintrotask.model.calculation.Calculation;
 import com.xaghoul.reactiveintrotask.model.calculation.OrderedCalculation;
 import com.xaghoul.reactiveintrotask.model.calculation.UnorderedCalculation;
@@ -12,6 +13,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
@@ -29,9 +32,19 @@ public class CalculateServiceImpl implements CalculationService {
 
     private Flux<Calculation> calculate(String function, int iter) {
         return Mono.fromSupplier(() -> factory.createCalculator(function, properties.getTimeoutMillis()))
-                .flatMapMany(calc -> Flux.fromStream(IntStream.range(0, iter).boxed())
-                        .delayElements(properties.getDelayAsDuration())
-                        .map(calc::calculate));
+                .flatMapMany(calc -> {
+                    // TODO: 5/12/2021 that some bullshit
+                    Flux<Integer> integerFlux = Flux.fromStream(IntStream.range(0, iter).boxed());
+                    integerFlux.delayElements(properties.getDelayAsDuration());
+                    return integerFlux
+                            .map(idx -> {
+                                try {
+                                    return calc.calculate(idx);
+                                } catch (ExecutionException | InterruptedException | TimeoutException e) {
+                                    throw new CalculationException("An error occurred while calculation script", e);
+                                }
+                            });
+                });
     }
 
     @Override

@@ -7,7 +7,9 @@ import org.graalvm.polyglot.Value;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -24,7 +26,7 @@ public class GraalJsCalculator implements Calculator {
     }
 
     @Override
-    public Calculation calculate(int callNumber) {
+    public Calculation calculate(int callNumber) throws ExecutionException, InterruptedException, TimeoutException {
         Value functionResult = context.eval("js", createSourceCode(functionCode));
         AtomicReference<Instant> start = new AtomicReference<>();
         AtomicReference<Instant> end = new AtomicReference<>();
@@ -34,13 +36,13 @@ public class GraalJsCalculator implements Calculator {
                 context.enter();
                 start.set(Instant.now());
                 Value r = functionResult.execute(callNumber);
-                end.set( Instant.now());
+                end.set(Instant.now());
                 context.leave();
                 return r;
             }).get(timeout, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
             context = Context.newBuilder("js").build();
-            throw new RuntimeException(e);
+            throw e;
         }
 
         double value = valueAsDigit(result);
