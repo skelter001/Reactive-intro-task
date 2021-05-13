@@ -1,1 +1,3 @@
 rootProject.name = 'Reactive-intro-task'
+
+include 'client'

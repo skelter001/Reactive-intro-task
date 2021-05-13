@@ -7,15 +7,21 @@ import com.xaghoul.reactiveintrotask.model.calculation.UnorderedCalculation;
 import com.xaghoul.reactiveintrotask.properties.CalculationProperties;
 import com.xaghoul.reactiveintrotask.service.CalculationService;
 import com.xaghoul.reactiveintrotask.service.CalculatorFactory;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.sql.Time;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
@@ -32,19 +38,9 @@ public class CalculateServiceImpl implements CalculationService {
 
     private Flux<Calculation> calculate(String function, int iter) {
         return Mono.fromSupplier(() -> factory.createCalculator(function, properties.getTimeoutMillis()))
-                .flatMapMany(calc -> {
-                    // TODO: 5/12/2021 that some bullshit
-                    Flux<Integer> integerFlux = Flux.fromStream(IntStream.range(0, iter).boxed());
-                    integerFlux.delayElements(properties.getDelayAsDuration());
-                    return integerFlux
-                            .map(idx -> {
-                                try {
-                                    return calc.calculate(idx);
-                                } catch (ExecutionException | InterruptedException | TimeoutException e) {
-                                    throw new CalculationException("An error occurred while calculation script", e);
-                                }
-                            });
-                });
+                .flatMapMany(calc -> Flux.fromStream(IntStream.range(0, iter).boxed())
+                        .delayElements(properties.getDelayAsDuration(), Schedulers.boundedElastic())
+                        .map(calc::calculate));
     }
 
     @Override

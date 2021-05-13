@@ -8,7 +8,6 @@ import java.time.Duration;
 
 @Data
 @ConfigurationProperties("reactiveintrotask")
-//@PropertySource("${src/main/resources:application.yml}")
 @NoArgsConstructor
 public class CalculationProperties {
 

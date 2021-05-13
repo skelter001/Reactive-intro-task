@@ -1,3 +1,3 @@
 reactiveintrotask:
-  delay-millis: 1000
-  timeout-millis: 10000
+  delay-millis: 100
+  timeout-millis: 1000
