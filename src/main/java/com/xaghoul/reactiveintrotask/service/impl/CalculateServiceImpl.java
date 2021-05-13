@@ -48,10 +48,12 @@ public class CalculateServiceImpl implements CalculationService {
         AtomicInteger counter = new AtomicInteger(0);
 
         Flux<Calculation> calculationFlux1 = calculate(firstFunction, iter)
-                .doOnNext(res -> counter.incrementAndGet());
+                .doOnNext(res -> counter.incrementAndGet())
+                .onBackpressureDrop();
 
         Flux<Calculation> calculationFlux2 = calculate(secondFunction, iter)
-                .doOnNext(res -> counter.decrementAndGet());
+                .doOnNext(res -> counter.decrementAndGet())
+                .onBackpressureDrop();
 
         return calculationFlux1.zipWith(calculationFlux2,
                 (res1, res2) -> new OrderedCalculation(
