@@ -1,5 +1,7 @@
 package com.xaghoul.reactiveintrotask.model.calculator;
 
+import com.xaghoul.reactiveintrotask.exception.CalculationException;
+import com.xaghoul.reactiveintrotask.exception.ScriptExecutionException;
 import com.xaghoul.reactiveintrotask.model.calculation.Calculation;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Value;
@@ -26,7 +28,7 @@ public class GraalJsCalculator implements Calculator {
     }
 
     @Override
-    public Calculation calculate(int callNumber) throws ExecutionException, InterruptedException, TimeoutException {
+    public Calculation calculate(int callNumber) {
         Value functionResult = context.eval("js", createSourceCode(functionCode));
         AtomicReference<Instant> start = new AtomicReference<>();
         AtomicReference<Instant> end = new AtomicReference<>();
@@ -40,9 +42,17 @@ public class GraalJsCalculator implements Calculator {
                 context.leave();
                 return r;
             }).get(timeout, TimeUnit.MILLISECONDS);
-        } catch (Exception e) {
+        } catch (ExecutionException ee) {
             context = Context.newBuilder("js").build();
-            throw e;
+            throw new ScriptExecutionException("Execution exception occurred during script execution", ee);
+        } catch (InterruptedException ie) {
+            context = Context.newBuilder("js").build();
+            throw new CalculationException("Interrupt exception occurred during script execution", ie);
+        } catch (TimeoutException te) {
+            context = Context.newBuilder("js").build();
+            throw new ScriptExecutionException("Timeout exception occurred during script execution", te);
+        } finally {
+            context = Context.newBuilder("js").build();
         }
 
         double value = valueAsDigit(result);

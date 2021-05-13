@@ -9,13 +9,10 @@ import com.xaghoul.reactiveintrotask.model.calculation.UnorderedCalculation;
 import com.xaghoul.reactiveintrotask.service.CalculationService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 import java.util.function.Predicate;
 
 @Component
@@ -33,20 +30,20 @@ public class CalculationHandler {
 
         return calculationMono.flatMap(calculation ->
                 ServerResponse.ok().contentType(MediaType.TEXT_EVENT_STREAM)
-                        .body(BodyInserters.fromValue(
-                                calculationService.calculateOrdered(
-                                        calculation.getFirstFunction(),
-                                        calculation.getSecondFunction(),
-                                        calculation.getIter())
+                        .body(calculationService.calculateOrdered(
+                                calculation.getFirstFunction(),
+                                calculation.getSecondFunction(),
+                                calculation.getIter())
                                         .map(OrderedCalculation::getDataAsString)
-                                        .onErrorResume(TimeoutException.class, te -> Mono.error(
-                                                new ScriptTimeoutException("Timeout exception occurred during script execution", te)))
-                                        .onErrorResume(ExecutionException.class, ee -> Mono.error(
-                                                new ScriptExecutionException("Execution exception: invalid script code", ee)))
-                                        .onErrorResume(InterruptedException.class, ie -> Mono.error(
-                                                new CalculationException("Interrupt exception occurred during script execution", ie)))
+                                        .onErrorReturn(InterruptedException.class,
+                                                "Interrupt exception occurred during script execution")
+                                        .onErrorReturn(ScriptTimeoutException.class,
+                                                "Timeout exception occurred during script execution")
+                                        .onErrorReturn(ScriptExecutionException.class,
+                                                "Execution exception occurred during script execution")
                                         .onErrorReturn(Predicate.not(e -> e instanceof CalculationException),
-                                                "An error occurred trying to calculate script")))
+                                                "An error occurred during calculation script"),
+                                String.class)
         );
     }
 
@@ -56,12 +53,19 @@ public class CalculationHandler {
 
         return calculationMono.flatMap(calculation ->
                 ServerResponse.ok().contentType(MediaType.TEXT_EVENT_STREAM)
-                        .body(BodyInserters.fromValue(
-                                calculationService.calculateUnordered(
-                                        calculation.getFirstFunction(),
-                                        calculation.getSecondFunction(),
-                                        calculation.getIter())
+                        .body(calculationService.calculateUnordered(
+                                calculation.getFirstFunction(),
+                                calculation.getSecondFunction(),
+                                calculation.getIter())
                                         .map(UnorderedCalculation::getDataAsString)
-                        )));
+                                        .onErrorReturn(InterruptedException.class,
+                                                "Interrupt exception occurred during script execution")
+                                        .onErrorReturn(ScriptTimeoutException.class,
+                                                "Timeout exception occurred during script execution")
+                                        .onErrorReturn(ScriptExecutionException.class,
+                                                "Execution exception occurred during script execution")
+                                        .onErrorReturn(Predicate.not(e -> e instanceof CalculationException),
+                                                "An error occurred during calculation script"),
+                                String.class));
     }
 }
