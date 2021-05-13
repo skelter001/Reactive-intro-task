@@ -1,4 +1,4 @@
-package com.xaghoul.reactiveintrotask.client;
+package com.xaghoul.reactiveintrotask.client.web;
 
 import com.xaghoul.reactiveintrotask.client.dto.CalculationRequest;
 import org.springframework.http.MediaType;

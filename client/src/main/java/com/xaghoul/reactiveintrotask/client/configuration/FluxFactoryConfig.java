@@ -1,5 +1,6 @@
-package com.xaghoul.reactiveintrotask.client;
+package com.xaghoul.reactiveintrotask.client.configuration;
 
+import com.xaghoul.reactiveintrotask.client.web.CalculationWebClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

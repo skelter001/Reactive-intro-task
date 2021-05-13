@@ -1,5 +1,6 @@
-package com.xaghoul.reactiveintrotask.client;
+package com.xaghoul.reactiveintrotask.client.init;
 
+import com.xaghoul.reactiveintrotask.client.configuration.ResultFluxFactory;
 import com.xaghoul.reactiveintrotask.client.dto.CalculationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
