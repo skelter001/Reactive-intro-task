@@ -15,12 +15,14 @@ public class CalculationRouter {
     public RouterFunction<ServerResponse> route(CalculationHandler calculationHandler) {
         return RouterFunctions
                 .route()
-                .POST("/calculation/ordered",
-                        RequestPredicates.accept(MediaType.TEXT_PLAIN),
+                .POST("/calculations/ordered",
+                        RequestPredicates.accept(MediaType.TEXT_EVENT_STREAM),
                         calculationHandler::orderedCalculation)
-                .POST("/calculation/unordered",
-                        RequestPredicates.accept(MediaType.TEXT_PLAIN),
+                .POST("/calculations/unordered",
+                        RequestPredicates.accept(MediaType.TEXT_EVENT_STREAM),
                         calculationHandler::unorderedCalculation)
+                .GET("/calculations/unordered",calculationHandler::unorderedCalculation)
+                .GET("calculation/ordered", calculationHandler::orderedCalculation)
                 .build();
     }
 }
