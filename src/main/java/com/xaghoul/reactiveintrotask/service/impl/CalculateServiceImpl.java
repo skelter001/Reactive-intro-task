@@ -1,27 +1,18 @@
 package com.xaghoul.reactiveintrotask.service.impl;
 
-import com.xaghoul.reactiveintrotask.exception.CalculationException;
 import com.xaghoul.reactiveintrotask.model.calculation.Calculation;
 import com.xaghoul.reactiveintrotask.model.calculation.OrderedCalculation;
 import com.xaghoul.reactiveintrotask.model.calculation.UnorderedCalculation;
 import com.xaghoul.reactiveintrotask.properties.CalculationProperties;
 import com.xaghoul.reactiveintrotask.service.CalculationService;
 import com.xaghoul.reactiveintrotask.service.CalculatorFactory;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import java.sql.Time;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service

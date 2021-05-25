@@ -2,4 +2,4 @@ spring:
   main:
     web-application-type: none
   profiles:
-    active: unordered
+    active: ordered
